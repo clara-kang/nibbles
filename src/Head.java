@@ -19,6 +19,8 @@ public class Head {
     public Head(){
         x = 0;
         y = 0;
+        speedX = Env.TILE_LENGTH;
+        speedY = 0;
     }
 
     public synchronized int getX() {

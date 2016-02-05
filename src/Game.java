@@ -74,10 +74,10 @@ public class Game extends Applet implements Runnable {
         while (IN_GAME) {
             head.update();
             repositionSnake();
-//            if(detectCollision()){
-//                System.out.println("gameover");
-//                break;
-//            }
+            if(detectCollision()){
+                System.out.println("gameover");
+                break;
+            }
             repaint();
             try {
                 Thread.sleep(Env.TIME_INTERVAL);
@@ -104,21 +104,24 @@ public class Game extends Applet implements Runnable {
     }
 
     private boolean detectCollision() {
-        Iterator<Node> itr = snake.iterator();
-        Node h = itr.next();
-        System.out.println("x: "+h.x);
-        System.out.println("y: "+h.y);
+
+        Node h = snake.getFirst();
         if( h.x < Env.BORDER_LEFT ||
-                h.x > Env.BORDER_RIGHT || h.y < Env.BORDER_UP || h.y > Env.BORDER_DOWN){
+                h.x >= Env.BORDER_RIGHT || h.y < Env.BORDER_UP || h.y >= Env.BORDER_DOWN){
             setGameOver();
             return true;
         }
-        while(itr.hasNext()){
-            Node n = itr.next();
-             if (n.x == h.x && n.y == h.y) {
+
+        for(int i = 2; i < snake.size(); i++){
+            Node n = snake.get(i);
+            if (n.x == h.x && n.y == h.y) {
+                System.out.println("x: "+n.x);
+                System.out.println("y: "+n.y);
                 setGameOver();
+                System.out.println("collide with oneself");
                 return true;
-             }
+            }
+
         }
         return false;
     }
