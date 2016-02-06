@@ -145,7 +145,7 @@ public class Game extends Applet implements Runnable {
 
     private boolean detectCollision(Node h) {
         if (h.x < Env.BORDER_LEFT ||
-                h.x >= Env.BORDER_RIGHT || h.x < Env.BORDER_UP || h.y >= Env.BORDER_DOWN) {
+                h.x >= Env.BORDER_RIGHT || h.y < Env.BORDER_UP || h.y >= Env.BORDER_DOWN) {
             setGameOver();
             System.out.println("game over");
             return true;
