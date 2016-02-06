@@ -9,5 +9,6 @@ public final class Env {
     static final int BORDER_RIGHT= WINDOW_SIZE;
     static final int BORDER_UP = 0;
     static final int BORDER_DOWN = WINDOW_SIZE;
+    static final int NUM_OF_TILES = WINDOW_SIZE/TILE_LENGTH;
 
 }

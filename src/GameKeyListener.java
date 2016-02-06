@@ -22,18 +22,22 @@ public class GameKeyListener implements KeyListener {
         Head head = game.getHead();
         switch (e.getKeyCode()){
             case KeyEvent.VK_UP:
+                head.setDirection(Direction.UP);
                 head.setSpeedX(0);
                 head.setSpeedY(-Env.TILE_LENGTH);
                 break;
             case KeyEvent.VK_DOWN:
+                head.setDirection(Direction.DOWN);
                 head.setSpeedX(0);
                 head.setSpeedY(Env.TILE_LENGTH);
                 break;
             case KeyEvent.VK_LEFT:
+                head.setDirection(Direction.LEFT);
                 head.setSpeedY(0);
                 head.setSpeedX(-Env.TILE_LENGTH);
                 break;
             case KeyEvent.VK_RIGHT:
+                head.setDirection(Direction.RIGHT);
                 head.setSpeedY(0);
                 head.setSpeedX(Env.TILE_LENGTH);
                 break;

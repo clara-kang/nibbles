@@ -3,10 +3,19 @@
  */
 public class Head {
 
-    int x;
-    int y;
-    int speedX;
-    int speedY;
+    private int x;
+    private int y;
+    private int speedX;
+    private int speedY;
+    private Direction direction;
+
+    public synchronized Direction getDirection() {
+        return direction;
+    }
+
+    public synchronized void setDirection(Direction direction) {
+        this.direction = direction;
+    }
 
     public synchronized void setSpeedX(int speedX) {
         this.speedX = speedX;
