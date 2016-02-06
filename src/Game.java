@@ -32,7 +32,7 @@ public class Game extends Applet implements Runnable {
 
     public void paint(Graphics g) {
         if (WAIT_TO_START) {
-            g.drawImage(imgLoader.getBackground(), 0, 0, this);
+            g.drawImage(imgLoader.getBackground_start(), 0, 0, this);
         } else if (IN_GAME) {
             g.drawImage(imgLoader.getBackground(), 0, 0, this);
 
@@ -42,7 +42,7 @@ public class Game extends Applet implements Runnable {
 
             g.drawImage(imgLoader.getBody(), next.x, next.y, this);
         } else if (GAME_OVER) {
-            g.drawImage(imgLoader.getBackground(), 0, 0, this);
+            g.drawImage(imgLoader.getBackground_over(), 0, 0, this);
         }
     }
 
@@ -68,10 +68,7 @@ public class Game extends Applet implements Runnable {
         addKeyListener(startKeyListener);
         generateNext();
         while (WAIT_TO_START) {
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-            }
+            repaint();
         }
         removeKeyListener(startKeyListener);
         addKeyListener(gameKeyListener);
@@ -94,7 +91,9 @@ public class Game extends Applet implements Runnable {
                 e.printStackTrace();
             }
         }
-        while (GAME_OVER) ;
+        while (GAME_OVER){
+            repaint();
+        };
     }
 
     private void repositionSnake() {

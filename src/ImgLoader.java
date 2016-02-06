@@ -7,10 +7,8 @@ import java.awt.*;
 public class ImgLoader {
 
     private Image body;
-    private Image apple;
-
-
-
+    private Image background_start;
+    private Image background_over;
     private Image background;
 
     MediaTracker tr;
@@ -19,6 +17,8 @@ public class ImgLoader {
         tr = new MediaTracker(applet);
         body = applet.getImage(applet.getCodeBase(), "coin50.png");
         background = applet.getImage(applet.getCodeBase(), "background.jpg");
+        background_start = applet.getImage(applet.getCodeBase(), "background_start.jpg");
+        background_over = applet.getImage(applet.getCodeBase(), "background_over.jpg");
         tr.addImage(body,0);
         try{
             tr.waitForAll();
@@ -32,10 +32,12 @@ public class ImgLoader {
         return body;
     }
 
-    public Image getApple() {
-        return apple;
+    public Image getBackground_over() {
+        return background_over;
     }
 
-
+    public Image getBackground_start() {
+        return background_start;
+    }
 
 }
