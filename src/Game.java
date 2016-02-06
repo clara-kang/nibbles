@@ -9,8 +9,8 @@ import java.util.*;
 public class Game extends Applet implements Runnable {
 
     private ImgLoader imgLoader;
-    private Head head;
     private Node next;
+    private Direction direction;
     private GameKeyListener gameKeyListener;
     private StartKeyListener startKeyListener;
     private LinkedList<Node> snake;
@@ -23,9 +23,9 @@ public class Game extends Applet implements Runnable {
         imgLoader = new ImgLoader(this);
         gameKeyListener = new GameKeyListener(this);
         startKeyListener = new StartKeyListener(this);
-        head = new Head();
         snake = new LinkedList<>();
         snake.add(new Node(0, 0, null));
+        direction = Direction.RIGHT;
 
         setWaitToStart();
     }
@@ -76,11 +76,8 @@ public class Game extends Applet implements Runnable {
         removeKeyListener(startKeyListener);
         addKeyListener(gameKeyListener);
         while (IN_GAME) {
-            head.update();
-            repositionSnake();
 
             if (detectCollision(snake.getFirst())) {
-                System.out.println("gameover");
                 break;
             }
 
@@ -89,6 +86,7 @@ public class Game extends Applet implements Runnable {
                 generateNext();
             }
 
+            repositionSnake();
             repaint();
             try {
                 Thread.sleep(Env.TIME_INTERVAL);
@@ -100,7 +98,19 @@ public class Game extends Applet implements Runnable {
     }
 
     private void repositionSnake() {
-        snake.addFirst(new Node(head.getX(), head.getY(), head.getDirection()));
+        Node head = snake.getFirst();
+
+        switch (direction){
+            case DOWN: snake.addFirst(new Node(head.x, head.y + Env.TILE_LENGTH, Direction.DOWN));
+                break;
+            case UP: snake.addFirst(new Node(head.x, head.y - Env.TILE_LENGTH, Direction.DOWN));
+                break;
+            case RIGHT: snake.addFirst(new Node(head.x + Env.TILE_LENGTH, head.y, null));
+                break;
+            case LEFT: snake.addFirst(new Node(head.x - Env.TILE_LENGTH, head.y, null));
+                break;
+
+        }
         snake.removeLast();
     }
 
@@ -118,20 +128,16 @@ public class Game extends Applet implements Runnable {
     }
 
     private void addNext() {
-        next.direction = head.getDirection();
         snake.addFirst(next);
-
-        head.setX(next.x);
-        head.setY(next.y);
     }
 
     private boolean detectReachNext() {
         Node h = snake.getFirst();
 
-        if ((h.direction == Direction.UP && h.x == next.x && h.y == next.y + Env.TILE_LENGTH)
-                || (h.direction == Direction.DOWN && h.x == next.x && h.y == next.y - Env.TILE_LENGTH)
-                || (h.direction == Direction.RIGHT && h.y == next.y && h.x == next.x - Env.TILE_LENGTH)
-                || (h.direction == Direction.LEFT && h.y == next.y && h.x == next.x + Env.TILE_LENGTH)) {
+        if ((direction == Direction.UP && h.x == next.x && h.y == next.y + Env.TILE_LENGTH)
+                || (direction == Direction.DOWN && h.x == next.x && h.y == next.y - Env.TILE_LENGTH)
+                || (direction == Direction.RIGHT && h.y == next.y && h.x == next.x - Env.TILE_LENGTH)
+                || (direction == Direction.LEFT && h.y == next.y && h.x == next.x + Env.TILE_LENGTH)) {
             System.out.println("reached next");
             return true;
         }
@@ -142,6 +148,7 @@ public class Game extends Applet implements Runnable {
         if (h.x < Env.BORDER_LEFT ||
                 h.x >= Env.BORDER_RIGHT || h.x < Env.BORDER_UP || h.y >= Env.BORDER_DOWN) {
             setGameOver();
+            System.out.println("game over");
             return true;
         }
 
@@ -162,15 +169,25 @@ public class Game extends Applet implements Runnable {
                 return true;
             }
         }
-        if((head.getDirection() == Direction.DOWN || head.getDirection() == Direction.UP )
-                && h.x == head.getX()){
+
+        Node head = snake.getFirst();
+        if((getDirection() == Direction.DOWN || getDirection() == Direction.UP )
+                && h.x == head.x){
             return true;
         }
-        if((head.getDirection() == Direction.LEFT || head.getDirection() == Direction.RIGHT )
-        && h.y == head.getY()){
+        if((getDirection() == Direction.LEFT || getDirection() == Direction.RIGHT )
+        && h.y == head.y){
             return true;
         }
         return false;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 
 
@@ -192,19 +209,14 @@ public class Game extends Applet implements Runnable {
         this.GAME_OVER = true;
     }
 
-    public Head getHead() {
-        return head;
-    }
 
     class Node {
         private int x;
         private int y;
-        private Direction direction;
 
         public Node(int x, int y, Direction direction) {
             this.x = x;
             this.y = y;
-            this.direction = direction;
         }
     }
 }
